@@ -1,0 +1,65 @@
+Q(1): Is your birthday on or after June 16, 1981? 
+A: yes
+	Q(1.1): Did you enter the United States before your sixteenth birthday? 
+	A: yes 
+		Q(1.1.1): Were you in the United States on June 15, 2012?
+		A: yes
+			Q(1.1.1.1):Have you continuously resided in the United States since June 15, 2007? 
+			A: yes
+				Q(1.1.1.1.1): Were you out of status on June 15, 2012? 
+				A: yes
+					Q(1.1.1.1.1.1): Have you been convicted of a felony or significant misdemeanor? 
+					A: no
+						Q(1.1.1.1.1.1.1):Have you been convicted of more than one misdemeanor? 
+						A: no
+							Q(1.1.1.1.1.1.1.1):Do you pose a threat to national security or public safety?
+							A: no
+								Q(1.1.1.1.1.1.1.1.1):Are you currently in school?
+								A: no
+									Q(1.1.1.1.1.1.1.1.1.1):Do you have a HS diploma?
+									A: no 
+										Q(1.1.1.1.1.1.1.1.1.1.1): Are you a honorably discharged veteran of the Coast Guard or Armed Forces of the United States?
+										A: no
+											Q(1.1.1.1.1.1.1.1.1.1.1.1):GOTO:3
+										A: yes
+											Q(1.1.1.1.1.1.1.1.1.1.1.2):GOTO:4
+									A: yes
+										Q(1.1.1.1.1.1.1.1.1.1.2): Are you 15 or older?
+										A: yes
+											Q(1.1.1.1.1.1.1.1.1.1.2.1):GOTO:4
+										A: no
+											Q(1.1.1.1.1.1.1.1.1.1.2.2): Are you currently in removal proceedings, or have a final removal or VD order?
+											A: yes
+												Q(1.1.1.1.1.1.1.1.1.1.2.2.1):GOTO:4
+											A: no
+												Q(1.1.1.1.1.1.1.1.1.1.2.2.2):GOTO:3
+								A: yes
+									Q(1.1.1.1.1.1.1.1.1.2): Are you 15 or older?
+									A: yes
+										Q(1.1.1.1.1.1.1.1.1.2.1):GOTO:4
+									A: no
+										Q(1.1.1.1.1.1.1.1.1.2.2): Are you currently in removal proceedings, or have a final removal or VD order?
+										A: yes
+											Q(1.1.1.1.1.1.1.1.1.2.2.1):GOTO:4
+										A: no
+											Q(1.1.1.1.1.1.1.1.1.2.2.2):GOTO:3
+	
+							A: yes
+								Q(1.1.1.1.1.1.1.1.2):GOTO:2
+						A: yes
+							Q(1.1.1.1.1.1.1.2):GOTO:2 
+					A: yes
+						Q(1.1.1.1.1.1.2):GOTO:2
+				A: no 
+					Q(1.1.1.1.1.2):GOTO:2
+			A: no
+				Q(1.1.1.1.2):GOTO:2
+		A: no
+			Q(1.1.1.2):GOTO:2
+	A: no
+		Q(1.1.2):GOTO:2 
+A: no
+	Q(1.2):GOTO:2
+Q(2): You are not eligible 
+Q(3): Wait 
+Q(4): You are eligible 
