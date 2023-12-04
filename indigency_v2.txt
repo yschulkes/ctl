@@ -1,0 +1,60 @@
+Title: Oregon Indigency Calculator
+Author: Yael Schulkes
+Before: <link rel="stylesheet" type="text/css" href="https://suffolklitlab.org/howto/qna/style/style.css">
+<div id="icon" style="background-size: 110px 99px;background-image: url('https://suffolklitlab.org/howto/qna/images/maxheadroom.gif');"></div>
+<h2 style="text-align:center;">Oregon Indigency Calculator</h2>
+<p><b>This is a <a href="https://www.codingthelaw.org/Fall_2023/level/2/#mission_p2">class project</a>. You should not rely on it as a source of legal information. It is likely incomplete.</b></p>
+<p>Answer the following questions to see if you qualify for an appointment of counsel or fee waiver.</p>
+After:
+<script>
+function fedpov(house,income,percentage){
+	// Determines if your income is less than or equal to
+	// a percentage of the 2023 federal poverty guidelines
+	// for the contiguous United States. See
+	// https://aspe.hhs.gov/poverty-guidelines
+
+		var line = NaN;
+
+		if (house == 1) {
+			line = 14580;
+		} else if (house == 2) {
+			line = 19720;
+		} else if (house == 3) {
+			line = 24860;
+		} else if (house == 4) {
+			line = 30000;
+		} else if (house == 5) {
+			line = 35140;
+		} else if (house == 6) {
+			line = 40280;
+		} else if (house == 7) {
+			line = 45420;
+		} else if (house == 8) {
+			line = 50560;
+		} else if (house > 8) {
+			line = 50560 + (house-8)*5140;
+		}
+
+		if (income <= (line*(percentage/125))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+</script>
+
+Q(household): How many people are in your household?
+X:number
+	Q(income): How much income does your household bring in per year in after-tax dollars?
+	X[javascript:if(fedpov(getvar('household'),getvar('income'),100)){goto('Assets')}else{goto('Deny')}]:number
+Q(Assets): Do you have any financial resources or personal assets?
+A[javascript:if (fedpov(getvar('household'),getvar('income'),100)){ goto('Part') } else { goto('Deny') } ]: Yes
+A[javascript:if (fedpov(getvar('household'),getvar('income'),100)){ goto('Qualify') } else if (fedpov(getvar('household'),getvar('income'),100)) { goto('Deny') } else { goto('Deny') }]: No
+
+Q(Part): You may be eligible for appointed counsel however, the court may require you to pay some or all of those assets towards the cost of counsel.
+
+Q(Qualify): You are likely financially eligible and qualify for a court-appointed attorney free of charge. 
+
+Q(Deny): You likely are not financially eligible and do not qualify for a court-appointed attorney. 
+
+
