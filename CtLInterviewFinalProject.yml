@@ -1,0 +1,1411 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.ALAnyState:any_state.yml
+---
+metadata:
+  title: >-
+    Apply for VA Disability Compensation
+  short title: >-
+    VA Disability Comp.
+  description: |-
+    This interview helps someone in Massachusetts apply for Veterans Disability Compensation with this office.
+  tags: []
+  authors:
+    - Yael  Schulkes
+  allowed_courts: []
+  typical_role: "plaintiff"
+  al_weaver_version: "1.10.3"
+  generated_on: "2023-11-28"
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
+---
+code: |
+  github_repo_name =  'docassemble-VaFormFillablepdfFilenameUtf8Va'
+---
+code: |
+  interview_short_title = "Apply for VA Disability Compensation"
+---
+code: |
+  al_form_type = "other_form" 
+---
+objects:
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+---
+sections:
+  - review_va_form_fillablepdf_filename_utf8va: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_va_form_fillablepdf_filename_utf8va
+code: |
+  # Set the allowed courts for this interview
+  nav.set_section("review_va_form_fillablepdf_filename_utf8va")
+  user_role = "plaintiff"
+  user_ask_role = "plaintiff"
+  Welcome
+  ServicemembersFirstName
+  Yes1
+  set_progress(20)
+  LivingInAHomelessShelter
+  Yes5
+  BeganOrWorsened1
+  set_progress(40)
+  Yes8
+  Yes16
+  interview_order_va_form_fillablepdf_filename_utf8va = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  va_form_fillablepdf_filename_utf8va_intro
+  interview_order_va_form_fillablepdf_filename_utf8va
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  va_form_fillablepdf_filename_utf8va_download
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Apply_for_VA_Disability_Compensation
+continue button field: va_form_fillablepdf_filename_utf8va_intro
+question: |
+  Apply for VA Disability Compensation
+subquestion: |
+  This interview will help our office in starting your application for Veterans Disability Compensation.
+  
+  Before you get started, please gather:
+  
+  1. Any information regarding your time in the service for the US Military 
+  2. Any discharge paper 
+  3. Your DD-214
+  
+  When you are finished, you will need to:
+  
+  1. Contact this office through telephone or by scheduling an appointment in person 
+  
+  Most people take about 30 minutes to finish this interview.
+---
+id: Welcome
+question: |
+  Welcome!
+subquestion: |
+  Please complete these questions to the best of your abilities to better help us get started on your claim.
+continue button field: Welcome
+---
+id: Veteran s Identification Information
+question: |
+  Veteran's Identification Information
+fields:
+  - "Service members first name": ServicemembersFirstName
+    maxlength: 34
+  - "Service members middle initial": ServicemembersMiddleInitial
+    maxlength: 1
+    required: False
+  - "Service members last name": ServicemembersLastName
+    maxlength: 51
+  - "Social security number": SocialSecurityNumber
+    datatype: number
+  - "Service members date of birth (mmddyyyy)": DateOfBirthMmDdYyyy
+    datatype: number
+  - "Service member's telephone number": TelephoneNumber
+    datatype: number
+    maxlength: 15
+  - "International phone number (if applicable)": InternationalPhoneNumber
+    datatype: number
+    maxlength: 15
+    required: False
+  - "Service member's street address": NoAndStreet
+    maxlength: 87
+  - "Apt/unit number": AptUnitNumber
+    maxlength: 14
+    required: False
+  - "Country": Country
+    maxlength: 6
+  - "Zipcode": ZipCode
+    datatype: number
+  - "State": State
+    maxlength: 6
+  - "Service member's Email address": EmailAddress
+    maxlength: 91
+    required: False
+  - "If you are currently a VA employee check this box": Yes2
+    datatype: yesno
+---
+id: Have you ever filed a claim with the VA?
+question: |
+  Have you ever filed a claim with the VA?
+fields:
+  - "Yes": Yes1
+    datatype: yesno
+  - "No": No1
+    datatype: yesno
+  - "If yes, please provide the Va file number": VaFileNumber
+    datatype: number
+    required: False
+---
+id: Homeless Information
+question: |
+  Homeless Information
+fields:
+  - note: |
+      Are you currently homeless?
+  - "Yes": Yes3
+    datatype: yesno
+  - "No": No2
+    datatype: yesno
+  - note: |
+      Please select all that apply
+  - "Living in a homeless shelter": LivingInAHomelessShelter
+    datatype: yesno
+  - "Not currently in a sheltered environment": NotCurrentlyInAShelteredEnvironmentEGLivingInACar
+    datatype: yesno
+  - "Staying with another person": StayingWithAnotherPerson
+    datatype: yesno
+  - "Fleeing current residence": FleeingCurrentResidence
+    datatype: yesno
+  - "Other (specify)": Other
+    datatype: yesno
+  - "Specify": Specify1
+    input type: area
+    maxlength: 60
+    required: False
+  - note: |
+      Are you currently at risk of becoming homeless?
+  - "Yes": Yes4
+    datatype: yesno
+  - "No": No3
+    datatype: yesno
+  - note: |
+      Please select all that apply
+  - "Housing will be lost in 30 days": HousingWillBeLostIn30Days
+    datatype: yesno
+  - "Leaving publicly funded system of care": LeavingPubliclyFundedSystemOfCareEGHomeless
+    datatype: yesno
+  - "Other (specify)": OtherSpecify1
+    datatype: yesno
+  - "Specify": Specify2
+    input type: area
+    maxlength: 60
+    required: False
+  - note: |
+      If we are unable to reach you
+  - "Name a person we can contact in order to get in touch with you": PointOfContact
+    maxlength: 98
+  - "Phone number for your point of contact": PointOfContactPhone
+    datatype: number
+---
+id: Exposure Information
+question: |
+  Exposure Information
+fields:
+  - note: |
+      Are you claiming any conditions related to toxic exposures?
+  - "Yes": Yes5
+    datatype: yesno
+  - "No": No4
+    datatype: yesno
+  - note: |
+      Did you serve in any of the following Gulf War hazard zone? Iraq; Kuwait; Saudi Arabia; the neutral zone between Iraq and Saudi Arabia; Bahrain; Qatar; the United Arab Emirates; Oman; Yemen; Lebanon; Somalia; Afghanistan; Israel; Egypt; Turkey; Syria; Jordan; Djibouti; Uzbekistan; the Gulf of Aden; the Gulf of Oman; the Persian Gulf; the Arabian Sea; and the Red Sea.
+  - "Yes": Yes6
+    datatype: yesno
+  - "No": No5
+    datatype: yesno
+  - "When did you serve in these locations from? (mmyyyy)": ServeInTheseLocationsStart1
+    datatype: number
+    required: False
+  - "When did you serve in these locations till? (mmyyyy)": ServeInTheseLocationsEnd1
+    datatype: number
+    required: False
+  - note: |
+      Did you serve in any of the following herbicide locations? Republic of Vietnam to include the 12 nautical mile territorial waters; Thailand at any United States or Royal Thai base; Laos; Cambodia at Mimot or Krek; Kampong Cham Province; Guam or American Samoa; or in the territorial waters thereof; Johnston Atoll or a ship that called at Johnston Atoll; Korean demilitarized zone; aboard (to include repeated operations and maintenance with) a C-123 aircraft known to have been used to spray an herbicide agent (during service in the Air Force and Air Force Reserves).
+  - "Yes": Yes7
+    datatype: yesno
+  - "No": No6
+    datatype: yesno
+  - "Please list other locations where you served if not listed above": PleaseListOtherLocationSWhereYouServedIfNotListedAbove
+    input type: area
+    maxlength: 142
+    required: False
+  - "When did you start serving in these locations? (mmyyyy)": ServeInTheseLocationsStart2
+    maxlength: 6
+    datatype: number
+    required: False
+  - "When did you finish serving in these locations? (mmyyyy)": ServeInTheseLocationsEnd2
+    datatype: number
+    required: False
+  - note: |
+      Have you been exposed to any of the following? (check all that apply)
+  - "Asbestos": Asbestos
+    datatype: yesno
+  - "Mustard Gas": MustardGas
+    datatype: yesno
+  - "Radiation": Radiation
+    datatype: yesno
+  - "SHAD shipboard hazard and defense": ShadShipboardHazardAndDefense
+    datatype: yesno
+  - "MOS-related toxin": MilitaryOccupationalSpecialtyMosRelatedToxin
+    datatype: yesno
+  - "Contaminated water at Camp LeJeune": ContaminatedWaterAtCampLejeune
+    datatype: yesno
+  - "Other (specify)": OtherSpecify2
+    datatype: yesno
+  - "Specify": Specify3
+    input type: area
+    maxlength: 156
+    required: false
+  - "When did your exposure start? (mmyyyy)": ExposureStart
+    datatype: number
+    required: False
+  - "When did your exposure end? (mmyyyy)": ExposureEnd
+    datatype: number
+    required: False
+  - "If you were exposed multiple times please provide all additional dates and locations of potential exposure": IfYouWereExposedMultipleTimesPleaseProvideAllAdditionalDatesAndLocationsOfPotentialExposure
+    input type: area
+    maxlength: 273
+    required: False
+---
+id: Disability Information
+question: |
+  Disability Information
+fields:
+  - "Current disability (1)": CurrentDisability1
+    maxlength: 54
+  - "Explain how the disability relates to the in-service event/exposure/injury.": ExplainHowTheDisabilitiesRelate1
+    maxlength: 50
+  - "If disability is due to exposure, event or injury, please specify": IfDueToExposureEventOrInjury1
+    maxlength: 40
+  - "Approximate date the disability began or worsened.": BeganOrWorsened1
+    maxlength: 12
+  - "Current disability (2)": CurrentDisability2
+    maxlength: 54
+    required: False
+  - "Explain how the disability relates to the in-service event/exposure/injury.": ExplainHowTheDisabilitiesRelate2
+    maxlength: 50
+    required: False
+  - "If disability is due to exposure, event or injury, please specify": IfDueToExposureEventOrInjury2
+    maxlength: 40
+    required: False
+  - "Approximate date the disability began or worsened": BeganOrWorsened2
+    maxlength: 12
+    required: False
+  - "Current disability (3)": CurrentDisability3
+    maxlength: 54
+    required: False
+  - "Explain how the disability relates to the in-service event/exposure/injury.": ExplainHowTheDisabilitiesRelate3
+    maxlength: 50
+    required: False
+  - "If disability is due to exposure, event or injury, please specify": IfDueToExposureEventOrInjury3
+    maxlength: 40
+    required: False
+  - "Approximate date the disability began or worsened.": BeganOrWorsened3
+    maxlength: 12
+    required: False
+  - "Current disability (4)": CurrentDisability4
+    maxlength: 54
+    required: False
+  - "Explain how the disability relates to the in-service event/exposure/injury.": ExplainHowTheDisabilitiesRelate4
+    maxlength: 50
+    required: False
+  - "If disability is due to exposure, event or injury, please specify": IfDueToExposureEventOrInjury4
+    maxlength: 40
+    required: False
+  - "Approximate date the disability began or worsened.": BeganOrWorsened4
+    maxlength: 12
+    required: False
+  - "Current disability (5)": CurrentDisability5
+    maxlength: 54
+    required: False
+  - "Explain how the disability relates to the in-service event/exposure/injury.": ExplainHowTheDisabilitiesRelate5
+    maxlength: 50
+    required: False
+  - "If disability is due to exposure, event or injury, please specify": IfDueToExposureEventOrInjury5
+    maxlength: 40
+    required: False
+  - "Approximate date the disability began or worsened.": BeganOrWorsened5
+    maxlength: 12
+    required: False
+  - note: |
+      Please input the relevant information regarding your previous medical treatment, if applicable 
+  - "Enter the disability that was treated and name the location of the treatment facility": EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility1
+    maxlength: 159
+    required: False
+  - "What was the date of your treatment? (mmyyyy)": DateOfTreatment1
+    datatype: number
+    required: False
+  - "I do not have the date": DontHaveDate1
+    datatype: yesno
+    required: False
+  - "Enter the disability that was treated and name the location of the treatment facility": EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility2
+    maxlength: 159
+    required: False
+  - "What was the date of your treatment? (mmyyyy)": DateOfTreatment2
+    datatype: number
+    required: False
+  - "I do not have the date.": DontHaveDate2
+    datatype: yesno
+    required: False
+  - "Enter the disability that was treated and name the location of the treatment facility": EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility3
+    maxlength: 159
+    required: False
+  - "What was the date of your treatment? (mmyyyy)": DateOfTreatment3
+    datatype: number
+    required: False
+  - "I do not have the date.": DontHaveDate3
+    datatype: yesno
+    required: False
+---
+id: Service Information
+question: |
+  Service Information
+fields:
+  - note: |
+      Have you served under any other name?
+  - "Yes": Yes8
+    datatype: yesno
+  - "No": No7
+    datatype: yesno
+  - "List the other names you served under, if applicable": ListTheOtherNameSYouServedUnder
+    maxlength: 47
+    required: False
+  - note: |
+      Which branch of the military did you serve in?
+  - "Army": Army1
+    datatype: yesno
+  - "Navy": Navy1
+    datatype: yesno
+  - "Marine Corps": MarineCorps1
+    datatype: yesno
+  - "Airforce": AirForce1
+    datatype: yesno
+  - "Coastguard": CoastGuard1
+    datatype: yesno
+  - "Spaceforce": SpaceForce1
+    datatype: yesno
+  - "NOAA": Noaa1
+    datatype: yesno
+  - "USPHS": Usphs1
+    datatype: yesno
+  - note: |
+      Which component applies to you?
+  - "Active": Active
+    datatype: yesno
+  - "Reserves": Reserves1
+    datatype: yesno
+  - "National Guard": NationalGuard1
+    datatype: yesno
+  - "What was your entry date (mmddyyyy)": EntryDateMMDDYYYY
+    datatype: number
+  - "What was your exit date (mmddyyyy)": ExitDateMMDDYYYY
+    datatype: number
+  - "Name the place of your last or anticipated separation": PlaceOfLastOrAnticipatedSeparation
+    maxlength: 47
+  - note: |
+      Did you serve in a combat zone since 9/11/2001?
+  - "Yes": Yes9
+    datatype: yesno
+  - "No": No8
+    datatype: yesno
+  - "Enter any additional entry dates of service (mmddyyyy)": AdditionalEntryDateMMDDYYYY
+    datatype: number
+    required: false
+  - "Enter any additional exit dates of service (mmddyyyy)": AdditionalExitDateMMDDYYYY
+    datatype: number
+    required: false
+  - note: |
+      Are you currently serving or have you ever served in the Reserves or National Guard? 
+  - "Yes": Yes10
+    datatype: yesno
+  - "No": No9
+    datatype: yesno
+  - "National Guard": NationalGuard2
+    datatype: yesno
+  - "Reserves": Reserves2
+    datatype: yesno
+  - "What was the starting date for your obligation term of service? (mmddyyyy)": ObligationEntryDateMMDDYYYY
+    datatype: number
+    required: False
+  - "What was the ending date for your obligation term of service? (mmddyyyy)": ObligationExitDateMMDDYYYY
+    datatype: number
+    required: False
+  - note: |
+      Are you currently receiving inactive duty training pay?
+  - "Yes": Yes11
+    datatype: yesno
+  - "No": No10
+    datatype: yesno
+  - "What is the current or last assigned name and address of your unit": CurrentOrLastAssignedNameAndAddressOfUnit
+    maxlength: 84
+  - "What is the phone number for that unit": PhoneOfUnit
+    datatype: number
+  - note: |
+      Are you currently activated on federal orders within the National Guard or Reserves?
+  - "Yes": Yes12
+    datatype: yesno
+  - "No": No11
+    datatype: yesno
+  - "What was your date of activation? (mmddyyyy)": DateOfActivationMMDDYYYY
+    datatype: number
+    required: False
+  - "What is your anticipated date of separation? (mmddyyyy)": AnticipatedSeparationDateMMDDYYYY
+    datatype: number
+    required: False
+  - note: |
+      Have you ever been a prisoner of war?
+  - "Yes": Yes13
+    datatype: yesno
+  - "No": No12
+    datatype: yesno
+  - "When did your confinement start? (mmddyyyy)": ConfinementStart1
+    datatype: number
+    required: False
+  - "When did your confinement end? (mmddyyyy)": ConfinementEnd1
+    datatype: number
+    required: False
+  - "When did your confinement start? (mmddyyyy)": ConfinementStart2
+    datatype: number
+    required: False
+  - "When did your confinement end? (mmddyyyy)": ConfinementEnd2
+    datatype: number
+    required: False
+---
+id: Service Pay
+question: |
+  Service Pay
+fields:
+  - note: |
+      Are you receiving military retired pay?
+  - "Yes": Yes14
+    datatype: yesno
+  - "No": No13
+    datatype: yesno
+  - note: |
+      Will you receive military retired pay in the future?
+  - "Yes (specify)": Yes15
+    datatype: yesno
+  - "Specify": Specify4
+    maxlength: 100
+    required: False
+  - "No": No14
+    datatype: yesno
+  - note: |
+      Please select your branch of service
+  - "Army": Army2
+    datatype: yesno
+  - "Navy": Navy2
+    datatype: yesno
+  - "Marine Corps": MarineCorps2
+    datatype: yesno
+  - "Airforce": AirForce2
+    datatype: yesno
+  - "Coast Guard": CoastGuard2
+    datatype: yesno
+  - "Spaceforce": SpaceForce2
+    datatype: yesno
+  - "NOAA": Noaa2
+    datatype: yesno
+  - "USPHS": Usphs2
+    datatype: yesno
+  - "What was the monthly amount?": MonthlyAmount
+    datatype: number
+    required: False
+  - note: |
+      What is your retired status?
+  - "Retired": Retired
+    datatype: yesno
+  - "Permanent Disability Retired List": RetiredList1
+    datatype: yesno
+  - "Temporary Disability Retired List": RetiredList2
+    datatype: yesno
+  - note: |
+      Have you ever received separation pay, disability severance pay, or any other lump sum payment from your branch of service?
+  - "Yes": Yes16
+    datatype: yesno
+  - "No": No15
+    datatype: yesno
+  - note: |
+      Please select the relevant branch of service for that pay
+  - "Army": Army3
+    datatype: yesno
+  - "Navy": Navy3
+    datatype: yesno
+  - "Marine Corps": MarineCorps3
+    datatype: yesno
+  - "Airforce": AirForce3
+    datatype: yesno
+  - "Coast Guard": CoastGuard3
+    datatype: yesno
+  - "Spaceforce": SpaceForce3
+    datatype: yesno
+  - "NOAA": Noaa3
+    datatype: yesno
+  - "USPHS": Usphs3
+    datatype: yesno
+  - "Date the payment was received (mmddyyyy)": DatePaymentReceivedMMDDYYYY
+    datatype: number
+    required: False
+  - "The amount you received": AmountReceived
+    datatype: number
+    required: False
+---
+id: preview va_form_fillablepdf_filename_utf8va
+question: |
+  Preview your form before you sign it
+subquestion: |
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_va_form_fillablepdf_filename_utf8va'), label='Edit answers', color='info') }
+  
+continue button field: va_form_fillablepdf_filename_utf8va_preview_question    
+
+---
+id: va form fillablepdf filename utf8va review screen
+event: review_va_form_fillablepdf_filename_utf8va
+question: |
+  Review your answers
+review:
+  - Edit: Yes8
+    button: |
+      **Did you serve under another name?**:
+      ${ word(yesno(Yes8)) }
+  - Edit: No7
+    button: |
+      **No**:
+      ${ word(yesno(No7)) }
+  - Edit: ListTheOtherNameSYouServedUnder
+    button: |
+      **List the other names you served under, if applicable**:
+      ${ ListTheOtherNameSYouServedUnder }
+  - Edit: LivingInAHomelessShelter
+    button: |
+      **Living in a homeless shelter**:
+      ${ word(yesno(LivingInAHomelessShelter)) }
+  - Edit: Yes16
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes16)) }
+  - Edit: Yes3
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes3)) }
+  - Edit: Army1
+    button: |
+      **Army**:
+      ${ word(yesno(Army1)) }
+  - Edit: Navy1
+    button: |
+      **Navy**:
+      ${ word(yesno(Navy1)) }
+  - Edit: MarineCorps1
+    button: |
+      **Marinecorps**:
+      ${ word(yesno(MarineCorps1)) }
+  - Edit: NotCurrentlyInAShelteredEnvironmentEGLivingInACar
+    button: |
+      **Not currently in a sheltered environment**:
+      ${ word(yesno(NotCurrentlyInAShelteredEnvironmentEGLivingInACar)) }
+  - Edit: No15
+    button: |
+      **No15**:
+      ${ word(yesno(No15)) }
+  - Edit: Active
+    button: |
+      **Active**:
+      ${ word(yesno(Active)) }
+  - Edit: Reserves1
+    button: |
+      **Reserves**:
+      ${ word(yesno(Reserves1)) }
+  - Edit: NationalGuard1
+    button: |
+      **National Guard**:
+      ${ word(yesno(NationalGuard1)) }
+  - Edit: BeganOrWorsened1
+    button: |
+      **Approximate date the disability began or worsened.**:
+      ${ BeganOrWorsened1 }
+  - Edit: AirForce1
+    button: |
+      **Airforce**:
+      ${ word(yesno(AirForce1)) }
+  - Edit: CoastGuard1
+    button: |
+      **Coastguard**:
+      ${ word(yesno(CoastGuard1)) }
+  - Edit: SpaceForce1
+    button: |
+      **Spaceforce**:
+      ${ word(yesno(SpaceForce1)) }
+  - Edit: CurrentDisability1
+    button: |
+      **Current disability (1)**:
+      ${ CurrentDisability1 }
+  - Edit: IfDueToExposureEventOrInjury1
+    button: |
+      **If disability is due to exposure, event or injury, please specify**:
+      ${ IfDueToExposureEventOrInjury1 }
+  - Edit: ExplainHowTheDisabilitiesRelate1
+    button: |
+      **Explain how the disability relates to the in-service event/exposure/injury.**:
+      ${ ExplainHowTheDisabilitiesRelate1 }
+  - Edit: StayingWithAnotherPerson
+    button: |
+      **Staying with another person**:
+      ${ word(yesno(StayingWithAnotherPerson)) }
+  - Edit: No2
+    button: |
+      **No2**:
+      ${ word(yesno(No2)) }
+  - Edit: Noaa1
+    button: |
+      **NOAA**:
+      ${ word(yesno(Noaa1)) }
+  - Edit: Usphs1
+    button: |
+      **USPHS**:
+      ${ word(yesno(Usphs1)) }
+  - Edit: FleeingCurrentResidence
+    button: |
+      **Fleeing current residence**:
+      ${ word(yesno(FleeingCurrentResidence)) }
+  - Edit: BeganOrWorsened2
+    button: |
+      **Approximate date the disability began or worsened**:
+      ${ BeganOrWorsened2 }
+  - Edit: Army3
+    button: |
+      **Army**:
+      ${ word(yesno(Army3)) }
+  - Edit: Navy3
+    button: |
+      **Navy**:
+      ${ word(yesno(Navy3)) }
+  - Edit: MarineCorps3
+    button: |
+      **Marine Corps**:
+      ${ word(yesno(MarineCorps3)) }
+  - Edit: CurrentDisability2
+    button: |
+      **Current disability (2)**:
+      ${ CurrentDisability2 }
+  - Edit: IfDueToExposureEventOrInjury2
+    button: |
+      **If disability is due to exposure, event or injury, please specify**:
+      ${ IfDueToExposureEventOrInjury2 }
+  - Edit: ExplainHowTheDisabilitiesRelate2
+    button: |
+      **Explain how the disability relates to the in-service event/exposure/injury.**:
+      ${ ExplainHowTheDisabilitiesRelate2 }
+  - Edit: DatePaymentReceivedMMDDYYYY
+    button: |
+      **Date the payment was received (mmddyyyy)**:
+      ${ DatePaymentReceivedMMDDYYYY }
+  - Edit: Other
+    button: |
+      **Other**:
+      ${ word(yesno(Other)) }
+  - Edit: Specify1
+    button: |
+      **Specify**:
+      > ${ single_paragraph(Specify1) }
+  - Edit: AmountReceived
+    button: |
+      **The amount you received**:
+      ${ AmountReceived }
+  - Edit: AirForce3
+    button: |
+      **Airforce**:
+      ${ word(yesno(AirForce3)) }
+  - Edit: CoastGuard3
+    button: |
+      **Coast Guard**:
+      ${ word(yesno(CoastGuard3)) }
+  - Edit: SpaceForce3
+    button: |
+      **Spaceforce**:
+      ${ word(yesno(SpaceForce3)) }
+  - Edit: BeganOrWorsened3
+    button: |
+      **Approximate date the disability began or worsened.**:
+      ${ BeganOrWorsened3 }
+  - Edit: CurrentDisability3
+    button: |
+      **Current disability (3)**:
+      ${ CurrentDisability3 }
+  - Edit: IfDueToExposureEventOrInjury3
+    button: |
+      **If disability is due to exposure, event or injury, please specify**:
+      ${ IfDueToExposureEventOrInjury3 }
+  - Edit: ExplainHowTheDisabilitiesRelate3
+    button: |
+      **Explain how the disability relates to the in-service event/exposure/injury.**:
+      ${ ExplainHowTheDisabilitiesRelate3 }
+  - Edit: Noaa3
+    button: |
+      **NOAA**:
+      ${ word(yesno(Noaa3)) }
+  - Edit: PlaceOfLastOrAnticipatedSeparation
+    button: |
+      **Name the place of your last or anticipated separation**:
+      ${ PlaceOfLastOrAnticipatedSeparation }
+  - Edit: Usphs3
+    button: |
+      **USPHS**:
+      ${ word(yesno(Usphs3)) }
+  - Edit: EntryDateMMDDYYYY1
+    button: |
+      **What was your entry date (mmddyyyy)**:
+      ${ EntryDateMMDDYYYY1 }
+  - Edit: HousingWillBeLostIn30Days
+    button: |
+      **Housing will be lost in 30 days**:
+      ${ word(yesno(HousingWillBeLostIn30Days)) }
+  - Edit: BeganOrWorsened4
+    button: |
+      **Approximate date the disability began or worsened.**:
+      ${ BeganOrWorsened4 }
+  - Edit: CurrentDisability4
+    button: |
+      **Current disability (4)**:
+      ${ CurrentDisability4 }
+  - Edit: IfDueToExposureEventOrInjury4
+    button: |
+      **If disability is due to exposure, event or injury, please specify**:
+      ${ IfDueToExposureEventOrInjury4 }
+  - Edit: ExplainHowTheDisabilitiesRelate4
+    button: |
+      **Explain how the disability relates to the in-service event/exposure/injury.**:
+      ${ ExplainHowTheDisabilitiesRelate4 }
+  - Edit: Yes4
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes4)) }
+  - Edit: EntryDateMMDDYYYY2
+    button: |
+      **What was your entry date (mmddyyyy)**:
+      ${ EntryDateMMDDYYYY2 }
+  - Edit: LeavingPubliclyFundedSystemOfCareEGHomeless
+    button: |
+      **Leaving publicly funded system of care**:
+      ${ word(yesno(LeavingPubliclyFundedSystemOfCareEGHomeless)) }
+  - Edit: BeganOrWorsened5
+    button: |
+      **Approximate date the disability began or worsened.**:
+      ${ BeganOrWorsened5 }
+  - Edit: No3
+    button: |
+      **No**:
+      ${ word(yesno(No3)) }
+  - Edit: OtherSpecify1
+    button: |
+      **Specify**:
+      ${ word(yesno(OtherSpecify1)) }
+  - Edit: CurrentDisability5
+    button: |
+      **Current disability (5)**:
+      ${ CurrentDisability5 }
+  - Edit: IfDueToExposureEventOrInjury5
+    button: |
+      **If disability is due to exposure, event or injury, please specify**:
+      ${ IfDueToExposureEventOrInjury5 }
+  - Edit: ExplainHowTheDisabilitiesRelate5
+    button: |
+      **Explain how the disability relates to the in-service event/exposure/injury.**:
+      ${ ExplainHowTheDisabilitiesRelate5 }
+  - Edit: Specify2
+    button: |
+      **Specify**:
+      > ${ single_paragraph(Specify2) }
+  - Edit: AdditionalEntryDateMMDDYYYY
+    button: |
+      **Enter any additional entry dates of service (mmddyyyy)**:
+      ${ AdditionalEntryDateMMDDYYYY }
+  - Edit: Yes9
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes9)) }
+  - Edit: No8
+    button: |
+      **No**:
+      ${ word(yesno(No8)) }
+  - Edit: AdditionalExitDateMMDDYYYY
+    button: |
+      **Enter any additional exit dates of service (mmddyyyy)**:
+      ${ AdditionalExitDateMMDDYYYY }
+  - Edit: PointOfContactPhone
+    button: |
+      **Phone number for your point of contact**:
+      ${ PointOfContactPhone }
+  - Edit: PointOfContact
+    button: |
+      **Name a person we can contact in order to get in touch with you**:
+      ${ PointOfContact }
+  - Edit: Yes10
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes10)) }
+  - Edit: NationalGuard2
+    button: |
+      **National Guard**:
+      ${ word(yesno(NationalGuard2)) }
+  - Edit: ObligationEntryDateMMDDYYYY
+    button: |
+      **What was the starting date for your obligation term of service? (mmddyyyy)**:
+      ${ ObligationEntryDateMMDDYYYY }
+  - Edit: ServicemembersFirstName
+    button: |
+      **Service members first name**:
+      ${ ServicemembersFirstName }
+  - Edit: ServicemembersMiddleInitial
+    button: |
+      **Service members middle initial**:
+      ${ ServicemembersMiddleInitial }
+  - Edit: ServicemembersLastName
+    button: |
+      **Service members last name**:
+      ${ ServicemembersLastName }
+  - Edit: No9
+    button: |
+      **No**:
+      ${ word(yesno(No9)) }
+  - Edit: Reserves2
+    button: |
+      **Reserves**:
+      ${ word(yesno(Reserves2)) }
+  - Edit: ObligationExitDateMMDDYYYY
+    button: |
+      **What was the ending date for your obligation term of service? (mmddyyyy)**:
+      ${ ObligationExitDateMMDDYYYY }
+  - Edit: Yes5
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes5)) }
+  - Edit: No4
+    button: |
+      **No**:
+      ${ word(yesno(No4)) }
+  - Edit: Yes1
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes1)) }
+  - Edit: No1
+    button: |
+      **No**:
+      ${ word(yesno(No1)) }
+  - Edit: VaFileNumber
+    button: |
+      **Va file number**:
+      ${ VaFileNumber }
+  - Edit: SocialSecurityNumber
+    button: |
+      **Social security number**:
+      ${ SocialSecurityNumber }
+  - Edit: Yes11
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes11)) }
+  - Edit: No10
+    button: |
+      **No**:
+      ${ word(yesno(No10)) }
+  - Edit: CurrentOrLastAssignedNameAndAddressOfUnit
+    button: |
+      **What is the current or last assigned name and address of your unit**:
+      ${ CurrentOrLastAssignedNameAndAddressOfUnit }
+  - Edit: PhoneOfUnit
+    button: |
+      **What is the phone number for that unit**:
+      ${ PhoneOfUnit }
+  - Edit: DateOfBirthMmDdYyyy
+    button: |
+      **Service members date of birth (mmddyyyy)**:
+      ${ DateOfBirthMmDdYyyy }
+  - Edit: Yes6
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes6)) }
+  - Edit: No5
+    button: |
+      **No**:
+      ${ word(yesno(No5)) }
+  - Edit: Yes12
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes12)) }
+  - Edit: ServeInTheseLocationsStart1
+    button: |
+      **When did you serve in these locations from? (mmyyyy)**:
+      ${ ServeInTheseLocationsStart1 }
+  - Edit: ServeInTheseLocationsEnd1
+    button: |
+      **When did you serve in these locations till? (mmyyyy)**:
+      ${ ServeInTheseLocationsEnd1 }
+  - Edit: TelephoneNumber
+    button: |
+      **Service member's telephone number**:
+      ${ TelephoneNumber }
+  - Edit: DateOfActivationMMDDYYYY
+    button: |
+      **What was your date of activation? (mmddyyyy)**:
+      ${ DateOfActivationMMDDYYYY }
+  - Edit: AnticipatedSeparationDateMMDDYYYY
+    button: |
+      **What is your anticipated date of separation? (mmddyyyy)**:
+      ${ AnticipatedSeparationDateMMDDYYYY }
+  - Edit: No11
+    button: |
+      **No**:
+      ${ word(yesno(No11)) }
+  - Edit: InternationalPhoneNumber
+    button: |
+      **International phone number (if applicable)**:
+      ${ InternationalPhoneNumber }
+  - Edit: Yes13
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes13)) }
+  - Edit: NoAndStreet
+    button: |
+      **Service member's street address**:
+      ${ NoAndStreet }
+  - Edit: Yes7
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes7)) }
+  - Edit: No6
+    button: |
+      **No**:
+      ${ word(yesno(No6)) }
+  - Edit: No12
+    button: |
+      **No**:
+      ${ word(yesno(No12)) }
+  - Edit: ConfinementStart1
+    button: |
+      **When did your confinement start? (mmddyyyy)**:
+      ${ ConfinementStart1 }
+  - Edit: ConfinementEnd1
+    button: |
+      **When did your confinement end? (mmddyyyy)**:
+      ${ ConfinementEnd1 }
+  - Edit: PleaseListOtherLocationSWhereYouServedIfNotListedAbove
+    button: |
+      **Please list other locations where you served if not listed above**:
+      > ${ single_paragraph(PleaseListOtherLocationSWhereYouServedIfNotListedAbove) }
+  - Edit: AptUnitNumber
+    button: |
+      **Apt/unit number**:
+      ${ AptUnitNumber }
+  - Edit: Country
+    button: |
+      **Country**:
+      ${ Country }
+  - Edit: ZipCode
+    button: |
+      **Zipcode**:
+      ${ ZipCode }
+  - Edit: State
+    button: |
+      **State**:
+      ${ State }
+  - Edit: ServeInTheseLocationsStart2
+    button: |
+      **When did you start serving in these locations? (mmyyyy)**:
+      ${ ServeInTheseLocationsStart2 }
+  - Edit: ServeInTheseLocationsEnd2
+    button: |
+      **When did you finish serving in these locations? (mmyyyy)**:
+      ${ ServeInTheseLocationsEnd2 }
+  - Edit: ConfinementStart2
+    button: |
+      **When did your confinement start? (mmddyyyy)**:
+      ${ ConfinementStart2 }
+  - Edit: ConfinementEnd2
+    button: |
+      **When did your confinement end? (mmddyyyy)**:
+      ${ ConfinementEnd2 }
+  - Edit: Asbestos
+    button: |
+      **Asbestos**:
+      ${ word(yesno(Asbestos)) }
+  - Edit: EmailAddress
+    button: |
+      **Service member's Email address**:
+      ${ EmailAddress }
+  - Edit: MustardGas
+    button: |
+      **Mustard Gas**:
+      ${ word(yesno(MustardGas)) }
+  - Edit: Radiation
+    button: |
+      **Radiation**:
+      ${ word(yesno(Radiation)) }
+  - Edit: ShadShipboardHazardAndDefense
+    button: |
+      **SHAD shipboard hazard and defense**:
+      ${ word(yesno(ShadShipboardHazardAndDefense)) }
+  - Edit: Yes15
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes15)) }
+  - Edit: MilitaryOccupationalSpecialtyMosRelatedToxin
+    button: |
+      **MOS-related toxin**:
+      ${ word(yesno(MilitaryOccupationalSpecialtyMosRelatedToxin)) }
+  - Edit: ContaminatedWaterAtCampLejeune
+    button: |
+      **Contaminated water at Camp LeJeune**:
+      ${ word(yesno(ContaminatedWaterAtCampLejeune)) }
+  - Edit: Yes14
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes14)) }
+  - Edit: OtherSpecify2
+    button: |
+      **Specify**:
+      > ${ single_paragraph(OtherSpecify2) }
+  - Edit: Yes2
+    button: |
+      **Yes**:
+      ${ word(yesno(Yes2)) }
+  - Edit: DontHaveDate1
+    button: |
+      **I do not have the date**:
+      ${ word(yesno(DontHaveDate1)) }
+  - Edit: No13
+    button: |
+      **No**:
+      ${ word(yesno(No13)) }
+  - Edit: DateOfTreatment1
+    button: |
+      **What was the date of your treatment? (mmyyyy)**:
+      ${ DateOfTreatment1 }
+  - Edit: Specify3
+    button: |
+      **Specify**:
+      > ${ single_paragraph(Specify3) }
+  - Edit: No14
+    button: |
+      **No**:
+      ${ word(yesno(No14)) }
+  - Edit: EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility1
+    button: |
+      **Enter the disability that was treated and name the location of the treatment facility**:
+      ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility1 }
+  - Edit: Specify4
+    button: |
+      **Specify**:
+      ${ Specify4 }
+  - Edit: DontHaveDate2
+    button: |
+      **I do not have the date.**:
+      ${ word(yesno(DontHaveDate2)) }
+  - Edit: ExposureStart
+    button: |
+      **When did your exposure start? (mmyyyy)**:
+      ${ ExposureStart }
+  - Edit: ExposureEnd
+    button: |
+      **When did your exposure end? (mmyyyy)**:
+      ${ ExposureEnd }
+  - Edit: DateOfTreatment2
+    button: |
+      **What was the date of your treatment? (mmyyyy)**:
+      ${ DateOfTreatment2 }
+  - Edit: Army2
+    button: |
+      **Army**:
+      ${ word(yesno(Army2)) }
+  - Edit: Navy2
+    button: |
+      **Navy**:
+      ${ word(yesno(Navy2)) }
+  - Edit: MarineCorps2
+    button: |
+      **Marine Corps**:
+      ${ word(yesno(MarineCorps2)) }
+  - Edit: MonthlyAmount
+    button: |
+      **What was the monthly amount?**:
+      ${ MonthlyAmount }
+  - Edit: EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility2
+    button: |
+      **Enter the disability that was treated and name the location of the treatment facility**:
+      ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility2 }
+  - Edit: Retired
+    button: |
+      **Retired**:
+      ${ word(yesno(Retired)) }
+  - Edit: RetiredList1
+    button: |
+      **Retired List**:
+      ${ word(yesno(RetiredList1)) }
+  - Edit: AirForce2
+    button: |
+      **Airforce**:
+      ${ word(yesno(AirForce2)) }
+  - Edit: CoastGuard2
+    button: |
+      **Coast Guard**:
+      ${ word(yesno(CoastGuard2)) }
+  - Edit: SpaceForce2
+    button: |
+      **Spaceforce**:
+      ${ word(yesno(SpaceForce2)) }
+  - Edit: DontHaveDate3
+    button: |
+      **I do not have the date.**:
+      ${ word(yesno(DontHaveDate3)) }
+  - Edit: Noaa2
+    button: |
+      **NOAA**:
+      ${ word(yesno(Noaa2)) }
+  - Edit: Usphs2
+    button: |
+      **USPHS**:
+      ${ word(yesno(Usphs2)) }
+  - Edit: RetiredList2
+    button: |
+      **Retired List**:
+      ${ word(yesno(RetiredList2)) }
+  - Edit: DateOfTreatment3
+    button: |
+      **What was the date of your treatment? (mmyyyy)**:
+      ${ DateOfTreatment3 }
+  - Edit: IfYouWereExposedMultipleTimesPleaseProvideAllAdditionalDatesAndLocationsOfPotentialExposure
+    button: |
+      **If you were exposed multiple times please provide all additional dates and locations of potential exposure**:
+      > ${ single_paragraph(IfYouWereExposedMultipleTimesPleaseProvideAllAdditionalDatesAndLocationsOfPotentialExposure) }
+  - Edit: EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility3
+    button: |
+      **Enter the disability that was treated and name the location of the treatment facility**:
+      ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility3 }
+  - Edit: City
+    button: |
+      **City**:
+      ${ City }
+---
+id: download va_form_fillablepdf_filename_utf8va
+event: va_form_fillablepdf_filename_utf8va_download
+question: |
+  All done
+subquestion: |
+  Thank you! Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_va_form_fillablepdf_filename_utf8va'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - va_form_fillablepdf_filename_utf8va_Post_interview_instructions: ALDocument.using(title="Instructions", filename="va_form_fillablepdf_filename_utf8va_next_steps.docx", enabled=True, has_addendum=False)
+  - va_form_fillablepdf_filename_utf8va_attachment: ALDocument.using(title="Apply for VA Disability Compensation", filename="va_form_fillablepdf_filename_utf8va", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[va_form_fillablepdf_filename_utf8va_Post_interview_instructions, va_form_fillablepdf_filename_utf8va_attachment], filename="va_form_fillablepdf_filename_utf8va", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[va_form_fillablepdf_filename_utf8va_attachment],  filename="va_form_fillablepdf_filename_utf8va", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: va_form_fillablepdf_filename_utf8va_next_steps
+  docx template file: va_form_fillablepdf_filename_utf8va_next_steps.docx
+  variable name: va_form_fillablepdf_filename_utf8va_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: va form fillablepdf filename utf8va
+  filename: va_form_fillablepdf_filename_utf8va
+  variable name: va_form_fillablepdf_filename_utf8va_attachment[i]
+  skip undefined: True
+  pdf template file: CtLFinalForm.pdf
+  fields:
+      - Yes8 Checkbox: ${ Yes8 }
+      - No7 Checkbox: ${ No7 }
+      - "ListTheOtherNameSYouServedUnder": ${ ListTheOtherNameSYouServedUnder }
+      - "LivingInAHomelessShelter": ${ LivingInAHomelessShelter }
+      - Yes16 Checkbox: ${ Yes16 }
+      - Yes3 Checkbox: ${ Yes3 }
+      - Army1 Checkbox: ${ Army1 }
+      - Navy1 Checkbox: ${ Navy1 }
+      - MarineCorps1 Checkbox: ${ MarineCorps1 }
+      - NotCurrentlyInAShelteredEnvironmentEGLivingInACar Checkbox: ${ NotCurrentlyInAShelteredEnvironmentEGLivingInACar }
+      - No15 Checkbox: ${ No15 }
+      - Active Checkbox: ${ Active }
+      - Reserves1 Checkbox: ${ Reserves1 }
+      - NationalGuard1 Checkbox: ${ NationalGuard1 }
+      - "BeganOrWorsened1": ${ BeganOrWorsened1 }
+      - AirForce1 Checkbox: ${ AirForce1 }
+      - CoastGuard1 Checkbox: ${ CoastGuard1 }
+      - SpaceForce1 Checkbox: ${ SpaceForce1 }
+      - "CurrentDisability1": ${ CurrentDisability1 }
+      - "IfDueToExposureEventOrInjury1": ${ IfDueToExposureEventOrInjury1 }
+      - "ExplainHowTheDisabilitiesRelate1": ${ ExplainHowTheDisabilitiesRelate1 }
+      - StayingWithAnotherPerson Checkbox: ${ StayingWithAnotherPerson }
+      - No2 Checkbox: ${ No2 }
+      - Noaa1 Checkbox: ${ Noaa1 }
+      - Usphs1 Checkbox: ${ Usphs1 }
+      - FleeingCurrentResidence Checkbox: ${ FleeingCurrentResidence }
+      - "BeganOrWorsened2": ${ BeganOrWorsened2 }
+      - Army3 Checkbox: ${ Army3 }
+      - Navy3 Checkbox: ${ Navy3 }
+      - MarineCorps3 Checkbox: ${ MarineCorps3 }
+      - "CurrentDisability2": ${ CurrentDisability2 }
+      - "IfDueToExposureEventOrInjury2": ${ IfDueToExposureEventOrInjury2 }
+      - "ExplainHowTheDisabilitiesRelate2": ${ ExplainHowTheDisabilitiesRelate2 }
+      - "DatePaymentReceivedMMDDYYYY": ${ "{:,.2f}".format(DatePaymentReceivedMMDDYYYY) }
+      - Other Checkbox: ${ Other }
+      - "Specify1": ${ Specify1 }
+      - "AmountReceived": ${ "{:,.2f}".format(AmountReceived) }
+      - AirForce3 Checkbox: ${ AirForce3 }
+      - CoastGuard3 Checkbox: ${ CoastGuard3 }
+      - SpaceForce3 Checkbox: ${ SpaceForce3 }
+      - "BeganOrWorsened3": ${ BeganOrWorsened3 }
+      - "CurrentDisability3": ${ CurrentDisability3 }
+      - "IfDueToExposureEventOrInjury3": ${ IfDueToExposureEventOrInjury3 }
+      - "ExplainHowTheDisabilitiesRelate3": ${ ExplainHowTheDisabilitiesRelate3 }
+      - Noaa3 Checkbox: ${ Noaa3 }
+      - "PlaceOfLastOrAnticipatedSeparation": ${ PlaceOfLastOrAnticipatedSeparation }
+      - Usphs3 Checkbox: ${ Usphs3 }
+      - "EntryDateMMDDYYYY1": ${ "{:,.2f}".format(EntryDateMMDDYYYY1) }
+      - HousingWillBeLostIn30Days Checkbox: ${ HousingWillBeLostIn30Days }
+      - "BeganOrWorsened4": ${ BeganOrWorsened4 }
+      - "CurrentDisability4": ${ CurrentDisability4 }
+      - "IfDueToExposureEventOrInjury4": ${ IfDueToExposureEventOrInjury4 }
+      - "ExplainHowTheDisabilitiesRelate4": ${ ExplainHowTheDisabilitiesRelate4 }
+      - Yes4 Checkbox: ${ Yes4 }
+      - "EntryDateMMDDYYYY2": ${ "{:,.2f}".format(EntryDateMMDDYYYY2) }
+      - LeavingPubliclyFundedSystemOfCareEGHomeless Checkbox: ${ LeavingPubliclyFundedSystemOfCareEGHomeless }
+      - "BeganOrWorsened5": ${ BeganOrWorsened5 }
+      - No3 Checkbox: ${ No3 }
+      - OtherSpecify1 Checkbox: ${ OtherSpecify1 }
+      - "CurrentDisability5": ${ CurrentDisability5 }
+      - "IfDueToExposureEventOrInjury5": ${ IfDueToExposureEventOrInjury5 }
+      - "ExplainHowTheDisabilitiesRelate5": ${ ExplainHowTheDisabilitiesRelate5 }
+      - Specify2 Checkbox: ${ Specify2 }
+      - "AdditionalEntryDateMMDDYYYY": ${ "{:,.2f}".format(AdditionalEntryDateMMDDYYYY) }
+      - Yes9 Checkbox: ${ Yes9 }
+      - No8 Checkbox: ${ No8 }
+      - "AdditionalExitDateMMDDYYYY": ${ "{:,.2f}".format(AdditionalExitDateMMDDYYYY) }
+      - "PointOfContactPhone": ${ "{:,.2f}".format(PointOfContactPhone) }
+      - "PointOfContact": ${ PointOfContact }
+      - Yes10 Checkbox: ${ Yes10 }
+      - NationalGuard2 Checkbox: ${ NationalGuard2 }
+      - "ObligationEntryDateMMDDYYYY": ${ "{:,.2f}".format(ObligationEntryDateMMDDYYYY) }
+      - "ServicemembersFirstName": ${ ServicemembersFirstName }
+      - "ServicemembersMiddleInitial": ${ ServicemembersMiddleInitial }
+      - "ServicemembersLastName": ${ ServicemembersLastName }
+      - No9 Checkbox: ${ No9 }
+      - Reserves2 Checkbox: ${ Reserves2 }
+      - "ObligationExitDateMMDDYYYY": ${ "{:,.2f}".format(ObligationExitDateMMDDYYYY) }
+      - Yes5 Checkbox: ${ Yes5 }
+      - No4 Checkbox: ${ No4 }
+      - Yes1 Checkbox: ${ Yes1 }
+      - No1 Checkbox: ${ No1 }
+      - "VaFileNumber": ${ "{:,.2f}".format(VaFileNumber) }
+      - "SocialSecurityNumber": ${ "{:,.2f}".format(SocialSecurityNumber) }
+      - Yes11 Checkbox: ${ Yes11 }
+      - No10 Checkbox: ${ No10 }
+      - "CurrentOrLastAssignedNameAndAddressOfUnit": ${ CurrentOrLastAssignedNameAndAddressOfUnit }
+      - "PhoneOfUnit": ${ "{:,.2f}".format(PhoneOfUnit) }
+      - "DateOfBirthMmDdYyyy": ${ "{:,.2f}".format(DateOfBirthMmDdYyyy) }
+      - Yes6 Checkbox: ${ Yes6 }
+      - No5 Checkbox: ${ No5 }
+      - Yes12 Checkbox: ${ Yes12 }
+      - "ServeInTheseLocationsStart1": ${ "{:,.2f}".format(ServeInTheseLocationsStart1) }
+      - "ServeInTheseLocationsEnd1": ${ "{:,.2f}".format(ServeInTheseLocationsEnd1) }
+      - "TelephoneNumber": ${ "{:,.2f}".format(TelephoneNumber) }
+      - "DateOfActivationMMDDYYYY": ${ "{:,.2f}".format(DateOfActivationMMDDYYYY) }
+      - "AnticipatedSeparationDateMMDDYYYY": ${ "{:,.2f}".format(AnticipatedSeparationDateMMDDYYYY) }
+      - No11 Checkbox: ${ No11 }
+      - "InternationalPhoneNumber": ${ "{:,.2f}".format(InternationalPhoneNumber) }
+      - Yes13 Checkbox: ${ Yes13 }
+      - "NoAndStreet": ${ NoAndStreet }
+      - Yes7 Checkbox: ${ Yes7 }
+      - No6 Checkbox: ${ No6 }
+      - No12 Checkbox: ${ No12 }
+      - "ConfinementStart1": ${ "{:,.2f}".format(ConfinementStart1) }
+      - "ConfinementEnd1": ${ "{:,.2f}".format(ConfinementEnd1) }
+      - "PleaseListOtherLocationSWhereYouServedIfNotListedAbove": ${ PleaseListOtherLocationSWhereYouServedIfNotListedAbove }
+      - "AptUnitNumber": ${ AptUnitNumber }
+      - "Country": ${ Country }
+      - "ZipCode": ${ "{:,.2f}".format(ZipCode) }
+      - "State": ${ State }
+      - "ServeInTheseLocationsStart2": ${ "{:,.2f}".format(ServeInTheseLocationsStart2) }
+      - "ServeInTheseLocationsEnd2": ${ "{:,.2f}".format(ServeInTheseLocationsEnd2) }
+      - "ConfinementStart2": ${ "{:,.2f}".format(ConfinementStart2) }
+      - "ConfinementEnd2": ${ "{:,.2f}".format(ConfinementEnd2) }
+      - Asbestos Checkbox: ${ Asbestos }
+      - "EmailAddress": ${ EmailAddress }
+      - MustardGas Checkbox: ${ MustardGas }
+      - Radiation Checkbox: ${ Radiation }
+      - ShadShipboardHazardAndDefense Checkbox: ${ ShadShipboardHazardAndDefense }
+      - Yes15 Checkbox: ${ Yes15 }
+      - MilitaryOccupationalSpecialtyMosRelatedToxin Checkbox: ${ MilitaryOccupationalSpecialtyMosRelatedToxin }
+      - ContaminatedWaterAtCampLejeune Checkbox: ${ ContaminatedWaterAtCampLejeune }
+      - Yes14 Checkbox: ${ Yes14 }
+      - OtherSpecify2 Checkbox: ${ OtherSpecify2 }
+      - Yes2 Checkbox: ${ Yes2 }
+      - DontHaveDate1 Checkbox: ${ DontHaveDate1 }
+      - No13 Checkbox: ${ No13 }
+      - "DateOfTreatment1": ${ "{:,.2f}".format(DateOfTreatment1) }
+      - Specify3 Checkbox: ${ Specify3 }
+      - No14 Checkbox: ${ No14 }
+      - "EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility1": ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility1 }
+      - Specify4 Checkbox: ${ Specify4 }
+      - DontHaveDate2 Checkbox: ${ DontHaveDate2 }
+      - "ExposureStart": ${ "{:,.2f}".format(ExposureStart) }
+      - "ExposureEnd": ${ "{:,.2f}".format(ExposureEnd) }
+      - "DateOfTreatment2": ${ "{:,.2f}".format(DateOfTreatment2) }
+      - Army2 Checkbox: ${ Army2 }
+      - Navy2 Checkbox: ${ Navy2 }
+      - MarineCorps2 Checkbox: ${ MarineCorps2 }
+      - "MonthlyAmount": ${ "{:,.2f}".format(MonthlyAmount) }
+      - "EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility2": ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility2 }
+      - Retired Checkbox: ${ Retired }
+      - RetiredList1 Checkbox: ${ RetiredList1 }
+      - AirForce2 Checkbox: ${ AirForce2 }
+      - CoastGuard2 Checkbox: ${ CoastGuard2 }
+      - SpaceForce2 Checkbox: ${ SpaceForce2 }
+      - DontHaveDate3 Checkbox: ${ DontHaveDate3 }
+      - Noaa2 Checkbox: ${ Noaa2 }
+      - Usphs2 Checkbox: ${ Usphs2 }
+      - RetiredList2 Checkbox: ${ RetiredList2 }
+      - "DateOfTreatment3": ${ "{:,.2f}".format(DateOfTreatment3) }
+      - "IfYouWereExposedMultipleTimesPleaseProvideAllAdditionalDatesAndLocationsOfPotentialExposure": ${ IfYouWereExposedMultipleTimesPleaseProvideAllAdditionalDatesAndLocationsOfPotentialExposure }
+      - "EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility3": ${ EnterTheDisabilityTreatedAndNameLocationOfTheTreatmentFacility3 }
+      - "City": ${ City }
+
+
+
